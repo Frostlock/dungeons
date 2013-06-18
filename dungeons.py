@@ -36,6 +36,7 @@ import ConfigParser
 import math
 import textwrap
 import shelve
+from class_structure import Room, Tile
  
 #actual size of the window
 SCREEN_WIDTH = 85 
@@ -97,7 +98,8 @@ color_dark_ground3 = libtcod.chartreuse * 0.4
 color_light_ground = libtcod.Color(200, 180, 50)
 color_light_ground2 = libtcod.orange * 0.9
 color_light_ground3 = libtcod.chartreuse * 0.9
- 
+
+""" 
 class Tile:
     #a tile of the map and its properties
     def __init__(self, blocked, block_sight = None):
@@ -109,8 +111,9 @@ class Tile:
         #by default, if a tile is blocked, it also blocks sight
         if block_sight is None: block_sight = blocked
         self.block_sight = block_sight
- 
-class Rect:
+"""
+""" 
+class Room:
     #a rectangle on the map. used to characterize a room.
     def __init__(self, x, y, w, h):
         self.x1 = x
@@ -127,7 +130,7 @@ class Rect:
         #returns true if this rectangle intersects with another one
         return (self.x1 <= other.x2 and self.x2 >= other.x1 and
                 self.y1 <= other.y2 and self.y2 >= other.y1)
- 
+""" 
 class Object(object):
     #this is a generic object: the player, a monster, an item, the stairs...
     #it's always represented by a character on screen.
@@ -262,6 +265,7 @@ class Fighter:
         self.hp += amount
         if self.hp > self.max_hp:
             self.hp = self.max_hp
+
  
 class BasicMonster:
     #AI for a basic monster.
@@ -446,21 +450,21 @@ def create_room(room):
     for x in range(room.x1 + 1, room.x2):
         for y in range(room.y1 + 1, room.y2):
             map[x][y].blocked = False
-            map[x][y].block_sight = False
+            map[x][y].blockSight = False
  
 def create_h_tunnel(x1, x2, y):
     global map
     #horizontal tunnel. min() and max() are used in case x1>x2
     for x in range(min(x1, x2), max(x1, x2) + 1):
         map[x][y].blocked = False
-        map[x][y].block_sight = False
+        map[x][y].blockSight = False
  
 def create_v_tunnel(y1, y2, x):
     global map
     #vertical tunnel
     for y in range(min(y1, y2), max(y1, y2) + 1):
         map[x][y].blocked = False
-        map[x][y].block_sight = False
+        map[x][y].blockSight = False
  
 def make_map():
     #BEGIN
@@ -478,10 +482,15 @@ def make_map():
     objects = [player]
  
     #fill map with "blocked" tiles
-    map = [[ Tile(True)
+    map = [[ Tile(map,x,y)
              for y in range(MAP_HEIGHT) ]
            for x in range(MAP_WIDTH) ]
- 
+    for y in range(MAP_HEIGHT):
+        for x in range(MAP_WIDTH):
+            myTile = map[x][y]
+            myTile.blocked = True
+            myTile.blockSight = True
+         
     rooms = []
     num_rooms = 0
  
@@ -493,8 +502,8 @@ def make_map():
         x = libtcod.random_get_int(0, 0, MAP_WIDTH - w - 1)
         y = libtcod.random_get_int(0, 0, MAP_HEIGHT - h - 1)
  
-        #"Rect" class makes rectangles easier to work with
-        new_room = Rect(x, y, w, h)
+        #"Room" class makes rectangles easier to work with
+        new_room = Room(x, y, w, h)
  
         #run through the other rooms and see if they intersect with this one
         failed = False
@@ -874,7 +883,7 @@ def render_all():
         for y in range(MAP_HEIGHT):
             for x in range(MAP_WIDTH):
                 visible = libtcod.map_is_in_fov(fov_map, x, y)
-                wall = map[x][y].block_sight
+                wall = map[x][y].blockSight
                 if not visible:
                     #if it's not visible right now, the player can only see it if it's explored
                     if map[x][y].explored:
@@ -1573,7 +1582,7 @@ def initialize_fov():
     fov_map = libtcod.map_new(MAP_WIDTH, MAP_HEIGHT)
     for y in range(MAP_HEIGHT):
         for x in range(MAP_WIDTH):
-            libtcod.map_set_properties(fov_map, x, y, not map[x][y].block_sight, not map[x][y].blocked)
+            libtcod.map_set_properties(fov_map, x, y, not map[x][y].blockSight, not map[x][y].blocked)
  
     libtcod.console_clear(con)  #unexplored areas start black (which is the default background color)
  
