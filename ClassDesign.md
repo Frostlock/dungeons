@@ -32,7 +32,7 @@ The following specialised sub classes are there at the moment, we can of course 
 
 Supporting classes
 ------------------
-<b>Libraries</b><br>
+<b>Libraries to abstract data access</b><br>
 To avoid hardcoding monster and item data in the code I would propose to externalize this data. 
 A library class will allow to easily access it. These classes can also help with the creation of new
 Monsters and Items.
@@ -40,7 +40,7 @@ Monsters and Items.
    * <b>MonsterLibrary</b><br>Expands with monster creation functionality
    * <b>ItemLibrary</b><br>Expands with item creation functionality
 
-<b>AI</b><br>
+<b>AI related</b><br>
 I'm not entirely sure yet on how to implement AI, I propose to start with something basic. A generic <b>AI</b> class
 that will show a uniform interface to the main classes (like <b>Game</b>) with specialized subclasses that implement 
 actual AIs.
