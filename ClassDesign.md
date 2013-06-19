@@ -3,7 +3,7 @@ Class design
 This document attempts to explain the high level class structure of this project. I strongly recommend to first read through this doc before digging into the code. It should help you understand the general layout
 of the project much faster.
 
-Not every class is mentioned in this document, only the most important ones.In the class definitions you will also find additional comments that explain each class in more detail.
+<b>Not every class is mentioned in this document, only the most important ones.</b>In the class definitions you will also find additional comments that explain each class in more detail.
 
 Main classes
 ------------
@@ -14,33 +14,40 @@ These are the main classes:
    * one <b>Map</b> object
    * multiple <b>Character</b> objects
    * multiple <b>Item</b> objects
-Note that <b>Level</b>, <b>Character</b> and <b>Item</b> are generic classes, they define generic interfaces to allow easy polymorphism of their subclasses. Ideally we only use these generic classes in our code. That way we write code that works for future specialized sub classes as well.
+Note that <b>Level</b>, <b>Character</b> and <b>Item</b> are generic classes, 
+they define generic interfaces to allow easy polymorphism of their subclasses. Ideally we only use these generic classes in our code. That way we write code that works for future specialized sub classes as well.
 The following specialised sub classes are there at the moment, we can of course add more.
 
-* Level
-   * GeneratedLevel
-   * TownLevel
-* Character
-   * Player
-   * NPC
-   * Monster
-* Item
-   * Equipment
-   * Consumable
-   * QuestItem    
+* <b>Level</b> subclasses:
+   * <b>GeneratedLevel</b><br> A randomly generated level.
+   * <b>TownLevel</b><br> A level representing a town with a fixed layout.
+* <b>Character</b> subclasses:
+   * <b>Player</b><br> Character representing the player
+   * <b>NPC</b><br> Character representing an NPC, for example a vendor
+   * <b>Monster</b><br> Character representing a monster
+* <b>Item</b> subclasses:
+   * <b>Equipment</b><br> Item that can be equiped (armor, weapon)
+   * <b>Consumable</b><br> Item that can be consumed (potion, scroll)
+   * <b>QuestItem</b><br> Item which is used in a quest context
 
 Supporting classes
 ------------------
 <b>Libraries</b><br>
-   To avoid hardcoding monster and item data in the code I would propose
-   to externalize this data. Using a Library class to access it.
+To avoid hardcoding monster and item data in the code I would propose to externalize this data. 
+A library class will allow to easily access it. These classes can also help with the creation of new
+Monsters and Items.
+* <b>Library</b> subclasses:<br>Contains the logic to access the external data store
+   * <b>MonsterLibrary</b><br>Expands with monster creation functionality
+   * <b>ItemLibrary</b><br>Expands with item creation functionality
 
 <b>AI</b><br>
-I'm not entirely sure yet on how to implement AI, I propose to start with something basic. We can add more specialised AIs to this structure.
-    AI (generic class to be used for polymorphism)
-        BasicMonsterAI
-        ConfusedMonsterAI
-        PlayerAI
+I'm not entirely sure yet on how to implement AI, I propose to start with something basic. A generic <b>AI</b> class
+that will show a uniform interface to the main classes (like <b>Game</b>) with specialized subclasses that implement 
+actual AIs.
+* <b>AI</b> subclasses:<br>
+   * <b>BasicMonsterAI</b><br>
+   * <b>ConfusedMonsterAI</b><br>
+   * <b>PlayerAI</b><br> This is a bit of a special case, I'm wondering if we can have the player controls mapped via this AI class. That way the game can ask every character to take a turn some AI classes will propose an action, this one could request the player to provide input.
         
-   You will notice some other more specialised classes below as well.
+  
 
