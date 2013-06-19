@@ -28,7 +28,6 @@ The following specialised sub classes are there at the moment, we can of course 
 * <b>Item</b> subclasses:
    * <b>Equipment</b><br> Item that can be equiped (armor, weapon)
    * <b>Consumable</b><br> Item that can be consumed (potion, scroll)
-   * <b>QuestItem</b><br> Item which is used in a quest context
 
 Supporting classes
 ------------------
