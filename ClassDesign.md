@@ -48,6 +48,8 @@ actual AIs.
    * <b>BasicMonsterAI</b><br>
    * <b>ConfusedMonsterAI</b><br>
    * <b>PlayerAI</b><br> This is a bit of a special case, I'm wondering if we can have the player controls mapped via this AI class. That way the game can ask every character to take a turn some AI classes will propose an action, this one could request the player to provide input.
-        
+
+<b>Utility</b><br>
+A class in which reusable utility functions can be placed. For example a function to roll a hitdie.
   
 
